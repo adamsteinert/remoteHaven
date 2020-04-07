@@ -1,0 +1,111 @@
+<!-- ./client/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+</head>
+
+<style>
+    canvas {
+        background: cornflowerblue;
+        margin: 1px solid gray;
+        padding: 0;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        width: 3000;
+        height: 3000;
+        font-family: sans-serif;
+        overflow: scroll;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        margin: 10px auto;
+        width: 100%;
+        color: #2c3e50;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .left {
+        width: 300px;
+        padding: 8px;
+    }
+
+    .right {
+        max-width: 1800px;
+    }
+</style>
+
+<body onload="init();initItemLists();">
+    
+    <div class="container">
+        <div class="left">
+            <div>Map Tiles</div>
+            <br />
+            <select id="tileSelect"></select>
+            <button onClick="addTileElement(document.getElementById('tileSelect').value)">Add Tiles</button> 
+            <br />
+            <!-- <button onClick="">Lock Tiles</button>  
+            <hr /> -->
+
+            <div>Player Characters</div>
+            <br />
+            <select id="pcs">
+                <option value="Brute">Brute</option>
+                <option value="Mindthief">Mindthief</option>
+                <option value="Spellweaver">Spellweaver</option>
+            </select>
+            <button onClick="">Add PC</button>            
+            <hr />
+
+            <div>Tile Adorners</div>
+            <br />
+            <select id="adorners">
+                <option value="Door">Door</option>
+            </select>
+            <button onClick="">Add Adorner</button>            
+            <hr />
+
+            <div>Monsters</div>
+            <br />
+            <select id="monsterSelect"></select>
+            <button onClick="addTileElement(document.getElementById('monsterSelect').value)">Add Monster</button>            
+            <hr />
+
+            Console
+            <div>Map Tiles</div>
+            <br />
+            <button onClick="sendMsg()">Ping</button>
+        </div>
+        <div class="right">
+            <div style="max-height: 90vh; overflow: auto;">
+                <canvas id="canvas"></canvas>
+            </div> 
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script type="text/javascript" src="/js/drawfn.js"></script>
+    <script type="text/javascript" src="/js/requests.js"></script>
+
+</body>
+
+</html>

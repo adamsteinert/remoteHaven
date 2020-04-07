@@ -1,0 +1,8 @@
+
+TODO:
+Check out performance tips? https://toggl.com/blog/html-canvas-createjs
+
+General Notes:
+favicon from: https://favicon.io/favicon-generator/
+https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event
+
