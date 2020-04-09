@@ -41,9 +41,32 @@ function addBmp(x, y, scale, tile) {
     bitmap.y = y;    
     bitmap.scaleX = scale;
     bitmap.scaleY = scale;
-    bitmap.on("pressmove",drag);
-    bitmap.on("mousedown", mouseDownReset)
-    stage.addChild(bitmap);    
+
+    // when image finishes loading, redraw the stage
+    bitmap.image.onload = function () {
+      stage.update();
+    }
+
+    // create label for unit number, just using UUID for label now
+    var txtLabel = new createjs.Text(bitmap.name, "20px Arial", "#ff7700");
+    txtLabel.y = y + 225;
+
+    // Making hitarea so you don't have to click on the text pixels themselves, anywhere in the box will work
+    // create a rectangle shape the same size as the text, and assign it as the hitArea
+    // note that it is never added to the display list.
+    var hit = new createjs.Shape();
+    hit.graphics.beginFill("#000").drawRect(0, 0, txtLabel.getMeasuredWidth(), txtLabel.getMeasuredHeight());
+    txtLabel.hitArea = hit;
+
+    // group image and label together as a unit
+    var container = new createjs.Container();
+    // don't let individual elements fire events, only container
+    container.mouseChildren = false;
+    container.on("pressmove", drag);
+    container.on("mousedown", mouseDownReset)
+    container.addChild(bitmap, txtLabel);
+ 
+    stage.addChild(container);    
 
     postBitmap("add", bitmap);
 }
