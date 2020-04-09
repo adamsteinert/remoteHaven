@@ -146,7 +146,16 @@ function uuidv4() {
 
 
 
+function createHexagonBorder(x, y, r, fill) {
+  //Draw Hexagon using drawPolyStar();
+  var hex = new createjs.Shape();
+  hex.graphics.beginStroke(fill)
+    .setStrokeStyle(5) //stroke width in pixels
+    .drawPolyStar(x, y, r, 6, 0, 30) //30 degrees for vertical, point on top
+    .closePath();
 
+  return hex;
+}
   
 function addCircle(x, y, r, fill) {
   var circle = new createjs.Shape();
