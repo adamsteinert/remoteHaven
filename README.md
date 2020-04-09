@@ -44,3 +44,4 @@ To finalize the 1st pass.. this is probably only a couple developer evenings wor
 ## Notes
 favicon from: https://favicon.io/favicon-generator/
 https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event
+https://www.createjs.com/docs/easeljs/modules/CreateJS.html

@@ -8,9 +8,7 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 app.use('/img', express.static('./client/img'));
 app.use('/js', express.static('./client/js'));
-//app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-//app.use(express.urlencoded({ extended: false }))
 
 let http = require("http").Server(app);
 // set up socket.io and bind it to our
@@ -59,7 +57,6 @@ app.get("/adorners", (req: any, res: any) => {
 
 
 app.route('/state')
-
   .get(function (req, res) {
     res.send('Get a random book')
   })

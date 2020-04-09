@@ -64,5 +64,6 @@ function postBitmap(actionId, target) {
         x: target.x,
         y: target.y,
         imgSrc: target.image.src
+        //TODO: adorners
     });
 }
