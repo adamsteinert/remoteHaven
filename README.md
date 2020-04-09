@@ -14,6 +14,8 @@ yarn install
 
 ## Run
 ```bash
+# For the first run, build first. subsequently you just need to yarn watch
+yarn build
 yarn watch
 ```
 
