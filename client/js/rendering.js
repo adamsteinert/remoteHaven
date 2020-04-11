@@ -1,9 +1,3 @@
-const socket = io("http://localhost:3000");
-
-function sendMsg() {
-  socket.emit("message", "HELLO WORLD");
-}
-
 var stage;
 var SIZE = 50;
 var cvSize = 3000;
@@ -23,43 +17,39 @@ function init() {
   stage.update();
 }
 
-function addTile() {
-    stage.addChild(addBmp(50, 50, .9, document.getElementById("tiles").value));
-    stage.update();    
+function addEventHandlers(thing) {
+  // don't let individual elements fire events, only container
+  thing.mouseChildren = false;
+  thing.on("pressmove", drag);
+  thing.on("mousedown", mouseDownReset)
+}
+
+
+function createBitmapItem(x, y, scale, tile) {
+  var bitmap = new createjs.Bitmap(tile);
+  bitmap.name = uuidv4();
+  bitmap.x = x;
+  bitmap.y = y;    
+  bitmap.scaleX = scale;
+  bitmap.scaleY = scale;
+
+  // when image finishes loading, redraw the stage
+  bitmap.image.onload = function () {
+    stage.update();
+  }
+  return bitmap;
 }
 
 function addTileElement(path) {
     console.log('add tile element ' + path);
-    var bitmap = addBmp(50, 50, .9, path);
+    var bitmap = createBitmapItem(50, 50, .9, path);
     addEventHandlers(bitmap);
     stage.addChild(bitmap);
     stage.update();    
+    
+    postGameItem("add", bitmap);
 }
 
-function addBmp(x, y, scale, tile) {
-    var bitmap = new createjs.Bitmap(tile);
-    bitmap.name = uuidv4();
-    bitmap.x = x;
-    bitmap.y = y;    
-    bitmap.scaleX = scale;
-    bitmap.scaleY = scale;
-
-    // when image finishes loading, redraw the stage
-    bitmap.image.onload = function () {
-      stage.update();
-    }
-
-    postBitmap("add", bitmap);
-
-    return bitmap;
-}
-
-function addEventHandlers(thing) {
-    // don't let individual elements fire events, only container
-    thing.mouseChildren = false;
-    thing.on("pressmove", drag);
-    thing.on("mousedown", mouseDownReset)
-}
 
 function addMonster(path, label, elite) {
     var x = 0;
@@ -70,7 +60,7 @@ function addMonster(path, label, elite) {
     var imageSizeScaled = imageSize * scale;
 
     console.log('add monster element ' + path);
-    var bitmap = addBmp(x, y, scale, path);
+    var bitmap = createBitmapItem(x, y, scale, path);
 
     // create label for unit
     var txtLabel = new createjs.Text(label, (22 * scale) + "px Arial", "white");

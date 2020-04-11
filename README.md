@@ -45,3 +45,7 @@ To finalize the 1st pass.. this is probably only a couple developer evenings wor
 favicon from: https://favicon.io/favicon-generator/
 https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event
 https://www.createjs.com/docs/easeljs/modules/CreateJS.html
+
+### Socket.io
+https://socket.io/docs/#What-Socket-IO-is
+https://socket.io/docs/emit-cheatsheet/
