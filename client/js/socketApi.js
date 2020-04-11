@@ -6,22 +6,17 @@ socket.on("news", function(data) {
 });
 
 // Item state updates from the server.
-socket.on("stateUpdate", function(data) {
-    console.log("[SU!]: " + data);
+socket.on("stateUpdate", function(item) {
+    console.log("[SU!]: " + item);
+    doStateUpdate(item)
 });
-
-// Send item state updates to the server.
-function postState(item) {
-    socket.emit("postState", item);
-}
-
 
 //Actions:
 //  add
 //  update
 //  delete
 function postGameItem(actionId, target) {
-    postState({
+    item = {
         action: actionId,
         name: target.name,
         rotation: target.rotation,
@@ -31,5 +26,7 @@ function postGameItem(actionId, target) {
         y: target.y,
         imgSrc: target.image.src
         //TODO: adorners
-    });
+    };
+
+    socket.emit("postState", item);
 }

@@ -22,6 +22,7 @@ function addEventHandlers(thing) {
   thing.mouseChildren = false;
   thing.on("pressmove", drag);
   thing.on("mousedown", mouseDownReset)
+  thing.on("pressup", mouseUpEvent)
 }
 
 
@@ -40,16 +41,80 @@ function createBitmapItem(x, y, scale, tile) {
   return bitmap;
 }
 
-function addTileElement(path) {
-    console.log('add tile element ' + path);
-    var bitmap = createBitmapItem(50, 50, .9, path);
-    addEventHandlers(bitmap);
-    stage.addChild(bitmap);
-    stage.update();    
-    
-    postGameItem("add", bitmap);
+function createBitmapItem(x, y, scale, tile, name) {
+  var bitmap = new createjs.Bitmap(tile);
+  bitmap.name = name || uuidv4();
+  bitmap.x = x;
+  bitmap.y = y;    
+  bitmap.scaleX = scale;
+  bitmap.scaleY = scale;
+
+  // when image finishes loading, redraw the stage
+  bitmap.image.onload = function () {
+    stage.update();
+  }
+  return bitmap;
 }
 
+// Create a RenderItemBase with just imgSrc and other values as defaults.
+function ibFromSrc(imgSrc) {
+  return {
+    name:uuidv4(),
+    x:50,
+    y:50,
+    imgSrc:imgSrc,
+    scaleX:.9
+  };
+}
+
+function addMapTile(itemBase, postUpdate=false) {
+    console.log('add tile element ' + itemBase.imgSrc);
+    
+    //?? Changing the signature to take itemBase broke dragging...
+    //var bitmap = createBitmapItemFrom(itemBase);
+    var bitmap = createBitmapItem(itemBase.x, itemBase.y, itemBase.scaleX, itemBase.imgSrc, itemBase.name);
+    
+    addEventHandlers(bitmap);
+    stage.addChild(bitmap);
+
+    // when image finishes loading, redraw the stage
+    bitmap.image.onload = function () {
+      stage.update();
+    }
+
+    if(postUpdate)
+      postGameItem("add", bitmap);
+}
+
+function doStateUpdate(state) {
+  var child = stage.getChildByName(state.name);
+  if(child) {
+    console.log("I Have child " + state.name + " for " + state.action);
+  } else {
+    console.log("I don't have child " + state.name);
+  }
+
+  // Modify local objects
+  if(state.action === "delete") {
+    if(child) {
+      stage.removeChild(child);
+      stage.update();
+    }
+  } else {
+    if(child) {
+      updateChild(child, state);
+    }
+    else {
+      addMapTile(state, false);
+    }
+  }
+}
+
+function updateChild(child, itemState) {
+  child.x = itemState.x;
+  child.y = itemState.y;
+  stage.update();
+} 
 
 function addMonster(path, label, elite) {
     var x = 0;
@@ -90,6 +155,9 @@ function addMonster(path, label, elite) {
  
     stage.addChild(container);    
     stage.update();
+
+    // if(postUpdate)
+    //   postGameItem("add", bitmap);
 }
 
 function drag(evt) {
@@ -123,6 +191,13 @@ function mouseDownReset(evt) {
     ct.y -= ny;
 }
 
+function mouseUpEvent(evt) {
+  console.log(evt);
+  if(lastTarget) {
+    postGameItem("update", lastTarget);
+  }
+}
+
 
 document.addEventListener('keydown', logKey);
 
@@ -130,9 +205,12 @@ function logKey(e) {
     console.log(`${e.code}`);
     switch(e.code) {
         case 'KeyD':
-          console.log("Delete " + lastTarget);
-          stage.removeChild(lastTarget);
-          stage.update()
+          if(lastTarget) {
+            console.log("Delete " + lastTarget);
+            stage.removeChild(lastTarget);
+            stage.update()
+            postGameItem("delete", lastTarget);
+          }
           break;
 
         case 'KeyZ':
