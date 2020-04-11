@@ -24,13 +24,15 @@ function init() {
 }
 
 function addTile() {
-    addBmp(50, 50, .9, document.getElementById("tiles").value);    
+    stage.addChild(addBmp(50, 50, .9, document.getElementById("tiles").value));
     stage.update();    
 }
 
 function addTileElement(path) {
     console.log('add tile element ' + path);
-    addBmp(50, 50, .9, path);    
+    var bitmap = addBmp(50, 50, .9, path);
+    addEventHandlers(bitmap);
+    stage.addChild(bitmap);
     stage.update();    
 }
 
@@ -41,11 +43,63 @@ function addBmp(x, y, scale, tile) {
     bitmap.y = y;    
     bitmap.scaleX = scale;
     bitmap.scaleY = scale;
-    bitmap.on("pressmove",drag);
-    bitmap.on("mousedown", mouseDownReset)
-    stage.addChild(bitmap);    
+
+    // when image finishes loading, redraw the stage
+    bitmap.image.onload = function () {
+      stage.update();
+    }
 
     postBitmap("add", bitmap);
+
+    return bitmap;
+}
+
+function addEventHandlers(thing) {
+    // don't let individual elements fire events, only container
+    thing.mouseChildren = false;
+    thing.on("pressmove", drag);
+    thing.on("mousedown", mouseDownReset)
+}
+
+function addMonster(path, label, elite) {
+    var x = 0;
+    var y = 0;
+    var scale = .4;
+
+    var imageSize = 250;
+    var imageSizeScaled = imageSize * scale;
+
+    console.log('add monster element ' + path);
+    var bitmap = addBmp(x, y, scale, path);
+
+    // create label for unit
+    var txtLabel = new createjs.Text(label, (22 * scale) + "px Arial", "white");
+    txtLabel.x = (imageSizeScaled - txtLabel.getMeasuredWidth()) / 2;
+    txtLabel.y = y + imageSizeScaled - (44 * scale);
+
+    // label background
+    var labelBG = new createjs.Shape();
+    var labelBuffer = 5 * scale;
+    labelBG.graphics.beginFill("gray").drawRoundRect(
+        txtLabel.x - labelBuffer, 
+        txtLabel.y - labelBuffer, 
+        txtLabel.getMeasuredWidth() + labelBuffer * 2, 
+        txtLabel.getMeasuredHeight() + labelBuffer * 2, 
+        labelBuffer * 1.5);
+
+    // elite unit border
+    var hexBorder;
+    if (elite) {
+      hexBorder = createHexagonBorder(x + imageSize / 2 * scale - 1, y + imageSize / 2 * scale, 115 * scale, "gold");
+    }
+
+    // group image and label together as a unit
+    var container = new createjs.Container();
+    addEventHandlers(container);
+    container.addChild(bitmap, hexBorder, labelBG, txtLabel);
+ 
+    stage.addChild(container);    
+    stage.update();
 }
 
 function drag(evt) {
@@ -123,7 +177,16 @@ function uuidv4() {
 
 
 
+function createHexagonBorder(x, y, r, fill) {
+  //Draw Hexagon using drawPolyStar();
+  var hex = new createjs.Shape();
+  hex.graphics.beginStroke(fill)
+    .setStrokeStyle(5) //stroke width in pixels
+    .drawPolyStar(x, y, r, 6, 0, 30) //30 degrees for vertical, point on top
+    .closePath();
 
+  return hex;
+}
   
 function addCircle(x, y, r, fill) {
   var circle = new createjs.Shape();

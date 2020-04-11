@@ -81,7 +81,24 @@
             <div>Monsters</div>
             <br />
             <select id="monsterSelect"></select>
-            <button onClick="addTileElement(document.getElementById('monsterSelect').value)">Add Monster</button>            
+            <br />
+            <select id="monsterNumber">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>                                             
+            </select>
+            <input type="checkbox" name="elite" id="elite" /><label for="elite">Elite</label>
+            <br />
+            <button onClick="addMonster(document.getElementById('monsterSelect').value, 
+                document.getElementById('monsterNumber').value, 
+                document.getElementById('elite').checked)">Add Monster</button>            
             <hr />
 
             Console
