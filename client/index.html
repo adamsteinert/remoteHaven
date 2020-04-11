@@ -49,79 +49,86 @@
 </style>
 
 <body onload="init();initItemLists();">
-    
+
     <div class="container">
         <div class="left">
-            <div>Map Tiles</div>
-            <br />
-            <select id="tileSelect"></select>
-            <button onClick="addTileElement(document.getElementById('tileSelect').value)">Add Tiles</button> 
-            <br />
-            <!-- <button onClick="">Lock Tiles</button>  
+
+            <fieldset>
+
+                <div>Map Tiles</div>
+                <br />
+                <select id="tileSelect"></select>
+                <button onClick="addTileElement(document.getElementById('tileSelect').value)">Add Tiles</button>
+                <br />
+                <!-- <button onClick="">Lock Tiles</button>  
             <hr /> -->
+            </fieldset>
 
-            <div>Player Characters</div>
-            <br />
-            <select id="pcs">
-                <option value="Brute">Brute</option>
-                <option value="Mindthief">Mindthief</option>
-                <option value="Spellweaver">Spellweaver</option>
-            </select>
-            <button onClick="">Add PC</button>            
-            <hr />
+            <fieldset>
+                <div>Player Characters</div>
+                <br />
+                <select id="pcs">
+                    <option value="Brute">Brute</option>
+                    <option value="Mindthief">Mindthief</option>
+                    <option value="Spellweaver">Spellweaver</option>
+                </select>
+                <button onClick="">Add PC</button>
+            </fieldset>
 
-            <div>Tile Adorners</div>
-            <br />
-            <select id="adorners">
-                <option value="Door">Door</option>
-            </select>
-            <button onClick="">Add Adorner</button>            
-            <hr />
+            <fieldset>
+                <div>Tile Adorners</div>
+                <br />
+                <select id="adorners">
+                    <option value="Door">Door</option>
+                </select>
+                <button onClick="">Add Adorner</button>
+            </fieldset>
 
-            <div>Monsters</div>
-            <br />
-            <select id="monsterSelect"></select>
-            <br />
-            <select id="monsterNumber">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>                                             
-            </select>
-            <input type="checkbox" name="elite" id="elite" /><label for="elite">Elite</label>
-            <br />
-            <button onClick="addMonster(document.getElementById('monsterSelect').value, 
+            <fieldset>
+                <div>Monsters</div>
+                <br />
+                <select id="monsterSelect"></select>
+                <br />
+                <!-- TODO: call a server method to get monster number. Use global increment as a cheap identity -->
+                <select id="monsterNumber">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+                <input type="checkbox" name="elite" id="elite" /><label for="elite">Elite</label>
+                <br />
+                <button onClick="addMonster(document.getElementById('monsterSelect').value, 
                 document.getElementById('monsterNumber').value, 
-                document.getElementById('elite').checked)">Add Monster</button>            
-            <hr />
+                document.getElementById('elite').checked)">Add Monster</button>
+            </fieldset>
 
-            Console
-            <div>Map Tiles</div>
-            <br />
-            <button onClick="sendMsg()">Ping</button>
+            <fieldset>
+                    <div>Map Tiles</div>
+                    <br />
+                    <button onClick="sendMsg()">Ping</button>
+            <fieldset>                    
+
         </div>
         <div class="right">
             <div style="max-height: 90vh; overflow: auto;">
                 <canvas id="canvas"></canvas>
-            </div> 
+            </div>
         </div>
     </div>
 
 
 
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
-    <script type="text/javascript" src="/js/drawfn.js"></script>
-    <script type="text/javascript" src="/js/requests.js"></script>
+    <script type="text/javascript" src="/js/rendering.js"></script>
+    <script type="text/javascript" src="/js/commApi.js"></script>
 
 </body>
 
