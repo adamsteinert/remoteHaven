@@ -152,6 +152,7 @@ function addMonster(path, label, elite) {
     addEventHandlers(container);
     container.addChild(bitmap, hexBorder, labelBG, txtLabel);
     container.scale = scale;
+    container.name = uuidv4();
  
     stage.addChild(container);    
     stage.update();
