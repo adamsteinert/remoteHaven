@@ -113,6 +113,7 @@ function doStateUpdate(state) {
 function updateChild(child, itemState) {
   child.x = itemState.x;
   child.y = itemState.y;
+  child.rotation = itemState.rotation;
   stage.update();
 } 
 
@@ -217,11 +218,13 @@ function logKey(e) {
         case 'KeyZ':
             lastTarget.rotation -= 15
             stage.update()
+            postGameItem("update", lastTarget);
             break; 
             
         case 'KeyC':
             lastTarget.rotation += 15
             stage.update()
+            postGameItem("update", lastTarget);
             break;             
         default:
           // code block
