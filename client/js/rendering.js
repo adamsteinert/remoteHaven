@@ -113,6 +113,7 @@ function doStateUpdate(state) {
 function updateChild(child, itemState) {
   child.x = itemState.x;
   child.y = itemState.y;
+  child.rotation = itemState.rotation;
   stage.update();
 } 
 
@@ -122,19 +123,18 @@ function addMonster(path, label, elite) {
     var scale = .4;
 
     var imageSize = 250;
-    var imageSizeScaled = imageSize * scale;
 
     console.log('add monster element ' + path);
-    var bitmap = createBitmapItem(x, y, scale, path);
+    var bitmap = createBitmapItem(x, y, 1, path);
 
     // create label for unit
-    var txtLabel = new createjs.Text(label, (22 * scale) + "px Arial", "white");
-    txtLabel.x = (imageSizeScaled - txtLabel.getMeasuredWidth()) / 2;
-    txtLabel.y = y + imageSizeScaled - (44 * scale);
+    var txtLabel = new createjs.Text(label, "22px Arial", "white");
+    txtLabel.x = (imageSize - txtLabel.getMeasuredWidth()) / 2;
+    txtLabel.y = y + imageSize - 44;
 
     // label background
     var labelBG = new createjs.Shape();
-    var labelBuffer = 5 * scale;
+    var labelBuffer = 5;
     labelBG.graphics.beginFill("gray").drawRoundRect(
         txtLabel.x - labelBuffer, 
         txtLabel.y - labelBuffer, 
@@ -145,13 +145,15 @@ function addMonster(path, label, elite) {
     // elite unit border
     var hexBorder;
     if (elite) {
-      hexBorder = createHexagonBorder(x + imageSize / 2 * scale - 1, y + imageSize / 2 * scale, 115 * scale, "gold");
+      hexBorder = createHexagonBorder(x + imageSize / 2 - 1, y + imageSize / 2, 118, "gold");
     }
 
     // group image and label together as a unit
     var container = new createjs.Container();
     addEventHandlers(container);
     container.addChild(bitmap, hexBorder, labelBG, txtLabel);
+    container.scale = scale;
+    container.name = uuidv4();
  
     stage.addChild(container);    
     stage.update();
@@ -216,11 +218,13 @@ function logKey(e) {
         case 'KeyZ':
             lastTarget.rotation -= 15
             stage.update()
+            postGameItem("update", lastTarget);
             break; 
             
         case 'KeyC':
             lastTarget.rotation += 15
             stage.update()
+            postGameItem("update", lastTarget);
             break;             
         default:
           // code block
@@ -249,7 +253,7 @@ function createHexagonBorder(x, y, r, fill) {
   //Draw Hexagon using drawPolyStar();
   var hex = new createjs.Shape();
   hex.graphics.beginStroke(fill)
-    .setStrokeStyle(5) //stroke width in pixels
+    .setStrokeStyle(9) //stroke width in pixels
     .drawPolyStar(x, y, r, 6, 0, 30) //30 degrees for vertical, point on top
     .closePath();
 

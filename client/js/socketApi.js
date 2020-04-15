@@ -24,7 +24,7 @@ function postGameItem(actionId, target) {
         scaleY: target.scaleY,
         x: target.x,
         y: target.y,
-        imgSrc: target.image.src
+        imgSrc: target.image ? target.image.src : target.children[0].image.src
         //TODO: adorners
     };
 
